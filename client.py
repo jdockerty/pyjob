@@ -59,11 +59,16 @@ class Search(object):
         if self._search_keyterms is None:
             logger.debug("No search keyterms are set.")
         else:
-            url += f"&keywords={self._search_keyterms}"
+            # url += f"&keywords="
+            # for keyword in self._search_keyterms:
+            #     url += f"%20{keyword}"
+            url += f"&keywords={self._search_keyterms}" # Check whether list items affect the query params in URL.
+
             
         if self._location is None:
             logger.debug("No location set.")
         else:
+            logger.info("Location set to {}", self._location)
             url += f"&location={self._location}"
         
         print(url)
@@ -86,5 +91,6 @@ class Search(object):
         
 s = Search()
 s.set_keyterms(["devops engineer", "software engineer"])
+s.set_location("London")
 # s.search()
 s._build_url()
