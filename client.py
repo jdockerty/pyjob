@@ -27,7 +27,7 @@ class Search(object):
         self._API_KEY = os.getenv("REED_API_KEY")
         self._session.auth = (self._API_KEY, '') # Password is left blank according to Reed API docs.
 
-        # Reset logger for ability to set custom level.
+        # Reset logger for ability to specify custom level.
         logger.remove()
         logger.add(sys.stderr, level=log_level)
         
