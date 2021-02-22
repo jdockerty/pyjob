@@ -25,7 +25,12 @@ class Search(object):
     results = {}
     
     def __init__(self, log_level="INFO"):
+        
         self._API_KEY = os.getenv("REED_API_KEY")
+        if self._API_KEY is None:
+            logger.info("REED_API_KEY is not set, exiting...")
+            sys.exit(1)
+            
         self._session.auth = (self._API_KEY, '') # Password is left blank according to Reed API docs.
 
         # Reset logger for ability to specify custom level.
@@ -36,21 +41,31 @@ class Search(object):
     def setup_class(cls):
         return cls()
 
+    def set_max_results(self, value: int):
+        
+        if value > 0 and value <= 100:
+            self._result_amount = value
+        else:
+            logger.info("Max results must be between 0 and 100.")
+            exit()
+        
     def set_keyterms(self, keyterms: list):
         
-        try:
-            assert len(keyterms) != 0
+        if len(keyterms) != 0:
             
             if len(keyterms) == 1:
+                logger.debug("Singular term: {}", keyterms[0])
                 self.search_keyterms = keyterms[0]
             else:
+                logger.debug("Multiple terms: {}", keyterms)
                 self._search_keyterms = []
                 for keyword in keyterms:
                     self._search_keyterms.append(keyword)
+        else:
+            logger.info("Key terms must be populated for a search.")
+            sys.exit(1)
 
-        except AssertionError:
-            logger.info("Key terms must be populated")
-            raise
+
             
     def set_location(self, location: str):
         
@@ -58,35 +73,26 @@ class Search(object):
     
     def set_location_distance(self, distance: int):
         
-        try:
-            assert distance >= 0
+        if distance >= 0:
             self._distance_from_location = distance
             logger.debug("Distance from location set to {}", self._distance_from_location)
-            
-        except AssertionError as err:
+        else:
             logger.info("Cannot have a distance lower than 0, using default of 10.")
+            self._distance_from_location = 10
     
-    def set_max_salary(self, value: int):
+
+    
+    def set_salary_range(self, min=0, max=0):
         
-        try:
-            assert value >= 0
-            self._maximum_salary = value
-            logger.debug("Maximum salary set to {}", self._maximum_salary)
+        if min >= 0 and max >= 0:
+            self._minimum_salary = min
+            self._maximum_salary = max
+            logger.info("Maximum salary: {}, Minimum salary: {}", self._maximum_salary, self._minimum_salary)
+        else:
+            logger.info("Salary must be between greater than 0.")
+            sys.exit(1)
+            
         
-        except AssertionError:
-            logger.info("Cannot have a negative maximum salary.")
-            raise
-        
-    def set_min_salary(self, value: int): 
-        
-        try:
-            assert value >= 0
-            self._minimum_salary = value
-            logger.debug("Minimum salary set to {}", self._minimum_salary)
-        
-        except AssertionError:
-            logger.info("Cannot have a negative minimum salary.")
-            raise
     
     def _build_url(self):
         
@@ -114,28 +120,15 @@ class Search(object):
             url += f"&minimumSalary={self._minimum_salary}"
             
         print(url)
+        return url
      
     def search(self):
         
-        if self._search_keyterms is None:
-            logger.info("No search keyterms are set. Exiting search...")
-            return
-        else:
-            logger.info("Search terms are {}", self._search_keyterms)
-            
-            search_url = f"{self._SEARCH_URL}keywords={self._search_keyterms}&location=Newcastle&resultsToTake=3&postedByRecruitmentAgency=false"
-            resp = self._session.get(search_url)
-            self.results = resp.json()['results']
-            print(self.results)
-            for result in self.results:
-                # print(result)
-                logger.info("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", result['jobTitle'], result['employerName'], result['minimumSalary'], result['maximumSalary'])
+        URL = self._build_url()
+        resp = self._session.get(URL)
+        self.results = resp.json()['results']
+        # print(self.results)
+        for result in self.results:
+            # print(result)
+            logger.info("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", result['jobTitle'], result['employerName'], result['minimumSalary'], result['maximumSalary'])
         
-s = Search()
-s.set_keyterms(["devops engineer", "software engineer"])
-s.set_location("London")
-s.set_location_distance(50)
-s.set_max_salary(50000)
-s.set_min_salary(30000)
-# s.search()
-s._build_url()
