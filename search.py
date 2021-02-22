@@ -129,6 +129,10 @@ class Search(object):
         self.results = resp.json()['results']
         # print(self.results)
         for result in self.results:
-            # print(result)
-            logger.info("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", result['jobTitle'], result['employerName'], result['minimumSalary'], result['maximumSalary'])
+
+            logger.info("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", 
+                        result['jobTitle'], 
+                        result['employerName'], 
+                        result['minimumSalary'], 
+                        result['maximumSalary'])
         
