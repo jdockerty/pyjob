@@ -1,8 +1,8 @@
 from search import Search
 import pytest
-# from pytest import MonkeyPatch
 
-search = Search()
+
+search = Search("DEBUG")
 
 def test_api_key_set():
     assert search._API_KEY != ""
