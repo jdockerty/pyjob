@@ -1,32 +1,46 @@
 from search import Search
 import pytest
 
+search = Search()
+
 def test_api_key_set():
-    s = Search()
-    assert s._API_KEY != ""
+    assert search._API_KEY != ""
 
 def test_default_location_distance():
-    s = Search()
-    s.set_location_distance(-50) # Default of 10 should be used
-    assert s._distance_from_location == 10
+    
+    search.set_location_distance(-50) # Default of 10 should be used
+    assert search._distance_from_location == 10
 
 def test_set_location():
-    s = Search()
-    s.set_location("London")
     
-    assert s._location == "London"
+    search.set_location("London")
+    
+    assert search._location == "London"
 
 def test_keyterms_set():
     
-    s = Search()
     terms = ['software engineer', 'devops', 'SRE']
-    s.set_keyterms(terms)
+    search.set_keyterms(terms)
     
-    assert s._search_keyterms == terms
+    assert search._search_keyterms == terms
 
 def test_keyterms_errors():
-    s = Search()
+    
     terms = ''
 
     with pytest.raises(AssertionError):
-        s.set_keyterms(terms)
+        search.set_keyterms(terms)
+
+def test_invalid_max_salary():
+
+    max_salary = -30000
+    
+    with pytest.raises(AssertionError):
+        search.set_max_salary(max_salary)
+
+def test_invalid_min_salary():
+
+    min_salary = -35000
+    
+    with pytest.raises(AssertionError):
+        search.set_min_salary(min_salary)
