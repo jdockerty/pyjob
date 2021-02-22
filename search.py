@@ -130,7 +130,7 @@ class Search(object):
         # print(self.results)
         for result in self.results:
 
-            logger.info("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", 
+            logger.debug("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", 
                         result['jobTitle'], 
                         result['employerName'], 
                         result['minimumSalary'], 
