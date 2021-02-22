@@ -1,13 +1,21 @@
 from search import Search
 import pytest
+# from pytest import MonkeyPatch
 
 search = Search()
 
 def test_api_key_set():
     assert search._API_KEY != ""
 
-def test_default_location_distance():
+def test_api_key_error(monkeypatch):
     
+    monkeypatch.delenv("REED_API_KEY")
+    with pytest.raises(SystemExit):
+        new_search = Search()   
+                       
+        
+def test_default_location_distance():
+
     search.set_location_distance(-50) # Default of 10 should be used
     assert search._distance_from_location == 10
 
@@ -28,19 +36,16 @@ def test_keyterms_errors():
     
     terms = ''
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(SystemExit):
         search.set_keyterms(terms)
 
-def test_invalid_max_salary():
-
-    max_salary = -30000
+def test_invalid_salary():
     
-    with pytest.raises(AssertionError):
-        search.set_max_salary(max_salary)
-
-def test_invalid_min_salary():
-
-    min_salary = -35000
+    min_salary_invalid = -50000
+    max_salary_invalid = -90000
     
-    with pytest.raises(AssertionError):
-        search.set_min_salary(min_salary)
+    with pytest.raises(SystemExit):
+        search.set_salary_range(min=min_salary_invalid)
+    
+    with pytest.raises(SystemExit):
+        search.set_salary_range(max=max_salary_invalid)
