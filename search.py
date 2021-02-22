@@ -17,6 +17,8 @@ class Search(object):
     _distance_from_location = 10 # Default
     _result_amount = 100 # Default and upper limit according to Reed API.
     _results_to_skip = 0
+    _minimum_salary = 0
+    _maximum_salary = 0
     _session = requests.Session()
     
 
@@ -63,6 +65,28 @@ class Search(object):
             
         except AssertionError as err:
             logger.info("Cannot have a distance lower than 0, using default of 10.")
+    
+    def set_max_salary(self, value: int):
+        
+        try:
+            assert value >= 0
+            self._maximum_salary = value
+            logger.debug("Maximum salary set to {}", self._maximum_salary)
+        
+        except AssertionError:
+            logger.info("Cannot have a negative maximum salary.")
+            raise
+        
+    def set_min_salary(self, value: int): 
+        
+        try:
+            assert value >= 0
+            self._minimum_salary = value
+            logger.debug("Minimum salary set to {}", self._minimum_salary)
+        
+        except AssertionError:
+            logger.info("Cannot have a negative minimum salary.")
+            raise
     
     def _build_url(self):
         
