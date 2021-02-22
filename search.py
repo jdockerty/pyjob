@@ -107,6 +107,12 @@ class Search(object):
             logger.info("Location set to {}", self._location)
             url += f"&location={self._location}"
         
+        if self._maximum_salary > 0:
+            url += f"&maximumSalary={self._maximum_salary}"
+        
+        if self._minimum_salary > 0:
+            url += f"&minimumSalary={self._minimum_salary}"
+            
         print(url)
      
     def search(self):
@@ -129,5 +135,7 @@ s = Search()
 s.set_keyterms(["devops engineer", "software engineer"])
 s.set_location("London")
 s.set_location_distance(50)
+s.set_max_salary(50000)
+s.set_min_salary(30000)
 # s.search()
 s._build_url()
