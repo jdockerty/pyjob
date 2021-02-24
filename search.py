@@ -11,7 +11,8 @@ class Search(object):
     _API_KEY = None
     _SEARCH_URL = "https://www.reed.co.uk/api/1.0/search?"
     _LOG_LEVEL = None
-    
+
+        
     _search_keyterms = None
     _location = None
     _distance_from_location = 10 # Default in miles
@@ -25,9 +26,10 @@ class Search(object):
     _recruitment_agency_post = None
     _employer_direct_post = None
     _graduate_suitable = None
+    _total_results = 0
+
     _session = requests.Session()
     
-
     results = {}
     
     def __init__(self):
@@ -150,21 +152,31 @@ class Search(object):
         if self._temporary is not None:
             url += f"&temp={self._temporary}"
             
-        print(url)
+        logger.debug("Built url: {}", url)
         return url
      
     def search(self):
         
         URL = self._build_url()
         resp = self._session.get(URL)
+        # print(resp.content)
         self.results = resp.json()['results']
-        # print(self.results)
+        self._total_results = resp.json()['totalResults']
+        print(self.results)
         for result in self.results:
             print(result['jobDescription'])
 
+    def get_total_results(self):
+        
+        if len(self.results) == 0:
+            logger.info("You must conduct a search with results before retrieving the total.")
+            sys.exit(1)
+        else:
+            return self._total_results
         
 s = Search()
-s.set_keyterms(['devops engineer', 'red hat linux', 'kubernetes'])
+s.set_keyterms(['frontend developer'])
+s.set_location("Newcastle")
 s.set_job_type("permanent")
 s.set_max_results(3)
 s.search()
