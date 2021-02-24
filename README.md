@@ -11,6 +11,6 @@ You can:
 
 ## TODO
 
-* Finish **Search** class for API interaction.
+* Finish **Search** class for API interaction. [WIP]
 * Build out a **Detail** class for finding more information around a job with the ID.
 * Create CLI wrapper for this API for job searches on the command line.
