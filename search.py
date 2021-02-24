@@ -61,6 +61,10 @@ class Search(object):
             logger.info("Max results must be between 0 and 100.")
             exit()
 
+    def set_graduate_roles(self, grad: bool):
+        
+        self._graduate_suitable = grad
+        
     def set_employer_id(self, id: str):
         
         self._employer_id = id
