@@ -27,7 +27,8 @@ class Search(object):
     _employer_direct_post = None
     _graduate_suitable = None
     _total_results = 0
-
+    _full_time_hours = None
+    _part_time_hours = None
     _session = requests.Session()
     
     results = {}
@@ -101,6 +102,17 @@ class Search(object):
             logger.info("Salary must be between greater than 0.")
             sys.exit(1)
     
+    def set_posted_by(self, poster: str):
+        
+        if poster.lower() == "employer":
+            self._employer_direct_post = True
+        elif poster.lower() == "recruiter":
+            self._recruitment_agency_post = True
+        else:
+            logger.info("Available values are 'employer' and 'recruiter' for job postings.")
+            sys.exit(1)
+        
+    
     def set_job_type(self, job_type: str):
          
         if job_type.lower() == "permanent":
@@ -113,7 +125,15 @@ class Search(object):
             logger.info("Available job types are 'permanent', 'contract', and 'temporary'.")
             sys.exit(1)
         
-            
+    def set_work_type(self, work_type: str):
+        
+        if work_type.lower() == "ft":
+            self._full_time_hours = True
+        elif work_type.lower() == "pt":
+            self._part_time_hours = True
+        else:
+            logger.info("Work type must be either 'ft' or 'pt', denoting either full time or part-time working hours.")
+            sys.exit(1)  
         
     
     def _build_url(self):
@@ -131,26 +151,42 @@ class Search(object):
         if self._location is None:
             logger.debug("No location set.")
         else:
-            logger.info("Location set to {}", self._location)
+            logger.debug("Location set to {}", self._location)
             url += f"&location={self._location}"
         
         if self._maximum_salary > 0:
+            logger.debug("Maximum salary set to {}", self._maximum_salary)
             url += f"&maximumSalary={self._maximum_salary}"
         
-        if self._minimum_salary > 0:
+        elif self._minimum_salary > 0:
+            logger.debug("Minimum salary set to {}", self._minimum_salary)
             url += f"&minimumSalary={self._minimum_salary}"
         
         if self._result_amount > 0:
+            logger.debug("Results to display set to {}", self._result_amount)
             url += f"&resultsToTake={self._result_amount}"
         
         if self._permanent is not None:
             url += f"&permanent={self._permanent}"
-        
-        if self._contract is not None:
+            
+        elif self._contract is not None:
             url += f"&contract={self._permanent}"
-
-        if self._temporary is not None:
+            
+        elif self._temporary is not None:
             url += f"&temp={self._temporary}"
+        
+        if self._full_time_hours is not None:
+            url += f"&fullTime={self._full_time_hours}"
+        elif self._part_time_hours is not None:
+            url += f"&partTime={self._part_time_hours}"
+        
+        if self._graduate_suitable is not None:
+            url += f"&graduate={self._graduate_suitable}"
+        
+        if self._employer_direct_post is not None:
+            url += f"&postedByDirectEmployer={self._employer_direct_post}"
+        elif self._recruitment_agency_post is not None:
+            url += f"&postedByRecruitmentAgency={self._recruitment_agency_post}"
             
         logger.debug("Built url: {}", url)
         return url
@@ -169,7 +205,7 @@ class Search(object):
                 
         except requests.HTTPError as err:
             logger.info("There was an error performing the request: {}", err)
-            sys.exit(1)
+            raise requests.HTTPError
             
     def get_total_results(self):
         
