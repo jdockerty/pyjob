@@ -12,5 +12,6 @@ You can:
 ## TODO
 
 * Finish **Search** class for API interaction. [WIP]
+* Add CI pipeline.
 * Build out a **Detail** class for finding more information around a job with the ID.
 * Create CLI wrapper for this API for job searches on the command line.
