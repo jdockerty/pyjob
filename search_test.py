@@ -2,7 +2,7 @@ from search import Search
 import pytest
 
 
-search = Search("DEBUG")
+search = Search()
 
 def test_api_key_set():
     assert search._API_KEY != ""
