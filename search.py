@@ -3,8 +3,6 @@ import sys
 import requests
 from loguru import logger
 
-# REED_SEARCH_API_URL=f"https://www.reed.co.uk/api/1.0/search?keyterms=accountant&location=london&distancefromlocation=15"
-
 # API Reference docs: https://www.reed.co.uk/developers/jobseeker
 class Search(object):
     
