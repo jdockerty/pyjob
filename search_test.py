@@ -49,3 +49,21 @@ def test_invalid_salary():
     
     with pytest.raises(SystemExit):
         search.set_salary_range(max=max_salary_invalid)
+        
+def test_invalid_job_type():
+    
+    invalid_type = "infinite_salary_type"
+    
+    with pytest.raises(SystemExit):
+        search.set_job_type(invalid_type)
+
+def test_successful_job_type():
+    
+    valid_type = "permanent"
+    another_valid_type = "contract"
+    
+    search.set_job_type(valid_type)
+    assert search._permanent ==  True
+    
+    search.set_job_type(another_valid_type)
+    assert search._contract == True
