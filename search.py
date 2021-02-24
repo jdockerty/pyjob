@@ -237,13 +237,3 @@ class Search(object):
             sys.exit(1)
         else:
             return self._total_results
-        
-s = Search()
-s.set_keyterms(['developer'])
-# s.set_location("Newcastle")
-# s.set_job_type("permanent")
-# s.set_max_results(2)
-# s.set_posted_by("employer")
-# s.set_employer_id("413757")
-s.set_employer_profile_id("p61278")
-s.search()
