@@ -13,6 +13,6 @@ You can:
 
 * Finish **Search** class for API interaction. [WIP]
 * Add CI pipeline.
-* Extra error handling/returns, currently just exiting on error and printing a log message with `sys.exit`.
+* Add custom exceptions for raising errors, currently just exiting on error and printing a log message with `sys.exit`.
 * Build out a **Detail** class for finding more information around a job with the ID.
 * Create CLI wrapper for this API for job searches on the command line.
