@@ -158,14 +158,19 @@ class Search(object):
     def search(self):
         
         URL = self._build_url()
-        resp = self._session.get(URL)
-        # print(resp.content)
-        self.results = resp.json()['results']
-        self._total_results = resp.json()['totalResults']
-        print(self.results)
-        for result in self.results:
-            print(result['jobDescription'])
-
+        try:
+            resp = self._session.get(URL)
+            resp.raise_for_status()
+            self.results = resp.json()['results']
+            self._total_results = resp.json()['totalResults']
+            print(self.results)
+            for result in self.results:
+                print(result['jobDescription'])
+                
+        except requests.HTTPError as err:
+            logger.info("There was an error performing the request: {}", err)
+            sys.exit(1)
+            
     def get_total_results(self):
         
         if len(self.results) == 0:
