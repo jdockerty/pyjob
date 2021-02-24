@@ -19,6 +19,12 @@ class Search(object):
     _results_to_skip = 0
     _minimum_salary = 0
     _maximum_salary = 0
+    _permanent = None
+    _temporary = None
+    _contract = None
+    _recruitment_agency_post = None
+    _employer_direct_post = None
+    _graduate_suitable = None
     _session = requests.Session()
     
 
@@ -91,6 +97,19 @@ class Search(object):
         else:
             logger.info("Salary must be between greater than 0.")
             sys.exit(1)
+    
+    def set_job_type(self, job_type: str):
+         
+        if job_type.lower() == "permanent":
+            self._permanent = True
+        elif job_type.lower() == "temporary":
+            self._temporary = True    
+        elif job_type.lower() == "contract":
+            self._contract = True
+        else:
+            logger.info("Available job types are 'permanent', 'contract', and 'temporary'.")
+            sys.exit(1)
+        
             
         
     
@@ -136,3 +155,4 @@ class Search(object):
                         result['minimumSalary'], 
                         result['maximumSalary'])
         
+s = Search()
