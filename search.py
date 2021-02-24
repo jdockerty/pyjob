@@ -14,6 +14,8 @@ class Search(object):
 
         
     _search_keyterms = None
+    _employer_id = None # Set ID for jobs by a specific employer, e.g. BAE Systems is 413757. This is best to glean from a particular job posting.
+    _employer_profile_id = None # Reed API is not very clear around this, even responses usually contain 'None', generally avoid. Added for completeness.
     _location = None
     _distance_from_location = 10 # Default in miles
     _result_amount = 100 # Default and upper limit according to Reed API.
@@ -58,6 +60,14 @@ class Search(object):
         else:
             logger.info("Max results must be between 0 and 100.")
             exit()
+
+    def set_employer_id(self, id: str):
+        
+        self._employer_id = id
+    
+    def set_employer_profile_id(self, id: str):
+        
+        self._employer_profile_id = id
         
     def set_keyterms(self, keyterms: list):
         
@@ -187,7 +197,13 @@ class Search(object):
             url += f"&postedByDirectEmployer={self._employer_direct_post}"
         elif self._recruitment_agency_post is not None:
             url += f"&postedByRecruitmentAgency={self._recruitment_agency_post}"
-            
+        
+        if self._employer_id is not None:
+            url += f"&employerId={self._employer_id}"
+        
+        if self._employer_profile_id is not None:
+            url += f"&employerProfileId={self._employer_profile_id}"
+                    
         logger.debug("Built url: {}", url)
         return url
      
@@ -199,9 +215,12 @@ class Search(object):
             resp.raise_for_status()
             self.results = resp.json()['results']
             self._total_results = resp.json()['totalResults']
+            
             print(self.results)
             for result in self.results:
-                print(result['jobDescription'])
+                # if result['employerName'] == "JP Morgan Chase":
+                #     print(result)
+                print(result['employerName'])
                 
         except requests.HTTPError as err:
             logger.info("There was an error performing the request: {}", err)
@@ -216,8 +235,11 @@ class Search(object):
             return self._total_results
         
 s = Search()
-s.set_keyterms(['frontend developer'])
-s.set_location("Newcastle")
-s.set_job_type("permanent")
-s.set_max_results(3)
+s.set_keyterms(['developer'])
+# s.set_location("Newcastle")
+# s.set_job_type("permanent")
+# s.set_max_results(2)
+# s.set_posted_by("employer")
+# s.set_employer_id("413757")
+s.set_employer_profile_id("p61278")
 s.search()
