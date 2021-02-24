@@ -82,4 +82,9 @@ def test_invalid_job_poster():
     
     with pytest.raises(SystemExit):
         search.set_posted_by(invalid_poster_type)
+
+def test_graduate_roles():
+
+    search.set_graduate_roles(True)
     
+    assert search._graduate_suitable == True
