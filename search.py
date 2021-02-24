@@ -14,7 +14,7 @@ class Search(object):
     
     _search_keyterms = None
     _location = None
-    _distance_from_location = 10 # Default
+    _distance_from_location = 10 # Default in miles
     _result_amount = 100 # Default and upper limit according to Reed API.
     _results_to_skip = 0
     _minimum_salary = 0
