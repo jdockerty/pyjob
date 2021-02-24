@@ -10,7 +10,7 @@ class Search(object):
     
     _API_KEY = None
     _SEARCH_URL = "https://www.reed.co.uk/api/1.0/search?"
-    _logger = None
+    _LOG_LEVEL = None
     
     _search_keyterms = None
     _location = None
@@ -30,7 +30,7 @@ class Search(object):
 
     results = {}
     
-    def __init__(self, log_level="INFO"):
+    def __init__(self):
         
         self._API_KEY = os.getenv("REED_API_KEY")
         if self._API_KEY is None:
@@ -38,14 +38,15 @@ class Search(object):
             sys.exit(1)
             
         self._session.auth = (self._API_KEY, '') # Password is left blank according to Reed API docs.
-
+        
         # Reset logger for ability to specify custom level.
         logger.remove()
-        logger.add(sys.stderr, level=log_level)
-        
-    @classmethod
-    def setup_class(cls):
-        return cls()
+        self._LOG_LEVEL = os.getenv("PYJOB_LEVEL")
+        if self._LOG_LEVEL is None:
+            logger.add(sys.stderr, level="INFO")
+
+        else:
+            logger.add(sys.stderr, level=self._LOG_LEVEL.upper())
 
     def set_max_results(self, value: int):
         
@@ -121,10 +122,9 @@ class Search(object):
         if self._search_keyterms is None:
             logger.debug("No search keyterms are set.")
         else:
-            # url += f"&keywords="
-            # for keyword in self._search_keyterms:
-            #     url += f"%20{keyword}"
-            url += f"&keywords={self._search_keyterms}" # Check whether list items affect the query params in URL.
+            url += f"&keywords="
+            for keyword in self._search_keyterms:
+                url += f"%20{keyword}"
   
         if self._location is None:
             logger.debug("No location set.")
@@ -137,6 +137,18 @@ class Search(object):
         
         if self._minimum_salary > 0:
             url += f"&minimumSalary={self._minimum_salary}"
+        
+        if self._result_amount > 0:
+            url += f"&resultsToTake={self._result_amount}"
+        
+        if self._permanent is not None:
+            url += f"&permanent={self._permanent}"
+        
+        if self._contract is not None:
+            url += f"&contract={self._permanent}"
+
+        if self._temporary is not None:
+            url += f"&temp={self._temporary}"
             
         print(url)
         return url
@@ -148,11 +160,11 @@ class Search(object):
         self.results = resp.json()['results']
         # print(self.results)
         for result in self.results:
+            print(result['jobDescription'])
 
-            logger.debug("\nTitle: {}\nEmployer: {}\nSalary range (£): {}-{}\n", 
-                        result['jobTitle'], 
-                        result['employerName'], 
-                        result['minimumSalary'], 
-                        result['maximumSalary'])
         
 s = Search()
+s.set_keyterms(['devops engineer', 'red hat linux', 'kubernetes'])
+s.set_job_type("permanent")
+s.set_max_results(3)
+s.search()
