@@ -67,3 +67,19 @@ def test_successful_job_type():
     
     search.set_job_type(another_valid_type)
     assert search._contract == True
+
+def test_job_poster():
+    
+    poster_type = "recruiter"
+    
+    search.set_posted_by(poster_type)
+    
+    assert search._recruitment_agency_post == True
+    
+def test_invalid_job_poster():
+    
+    invalid_poster_type = "myself"
+    
+    with pytest.raises(SystemExit):
+        search.set_posted_by(invalid_poster_type)
+    
