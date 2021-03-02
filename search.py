@@ -304,7 +304,9 @@ class Search(object):
             resp.raise_for_status()
             self.results = resp.json()['results']
             self._total_results = resp.json()['totalResults']
-                
+            
+            return self.results
+        
         except requests.HTTPError as err:
             logger.info("There was an error performing the request: {}", err)
             raise requests.HTTPError
