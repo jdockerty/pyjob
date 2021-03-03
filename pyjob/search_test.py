@@ -1,4 +1,4 @@
-from search import Search
+from pyjob.search import Search
 import pytest
 
 
@@ -45,10 +45,10 @@ def test_invalid_salary():
     max_salary_invalid = -90000
     
     with pytest.raises(SystemExit):
-        search.set_salary_range(min=min_salary_invalid)
+        search.set_salary_range(min=min_salary_invalid, max=0)
     
     with pytest.raises(SystemExit):
-        search.set_salary_range(max=max_salary_invalid)
+        search.set_salary_range(min=0, max=max_salary_invalid)
         
 def test_invalid_job_type():
     
