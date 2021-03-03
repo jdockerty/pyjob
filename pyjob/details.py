@@ -1,6 +1,7 @@
-from search import Search
+from pyjob.search import Search
 from loguru import logger
 import sys
+import time
 
 class Details(Search):
     
@@ -13,7 +14,7 @@ class Details(Search):
     
     def get_extended_description(self, jobId: str):
         resp = self._session.get(f"{self._DETAILS_URL}/{jobId}").json()
-        
+        time.sleep(1) # Rate-limiting avoidance on continually getting job details.
         extended_desc = resp['jobDescription']
         
         return extended_desc
