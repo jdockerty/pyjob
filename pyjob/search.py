@@ -171,13 +171,18 @@ class Search(object):
             max (int, optional): The highest amount to cap out the job searches for. Defaults to 0.
         """
         
-        if min >= 0 or max >= 0:
-            self._minimum_salary = min
-            self._maximum_salary = max
-            logger.debug("Maximum salary: {}, Minimum salary: {}", self._maximum_salary, self._minimum_salary)
-        else:
+        if min < 0 or max < 0:
             logger.info("Salary must be between greater than 0.")
             sys.exit(1)
+            
+        if min >= 0:
+            self._minimum_salary = min
+        
+        if max >= 0:
+            self._maximum_salary = max
+            
+        logger.debug("Maximum salary: {}, Minimum salary: {}", self._maximum_salary, self._minimum_salary)
+
     
     def set_posted_by(self, poster: str):
         """Set who the job advert was posted by, either a recruitment agency or the employer directly.
