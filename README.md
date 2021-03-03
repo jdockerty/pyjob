@@ -10,7 +10,7 @@ You can:
 
 ## Installation
 
-    pip install pyjob
+    pip install pyjob-jdockerty
 
 ## TODO
 
