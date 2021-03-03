@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     
 setup(
     name="pyjob-jdockerty",
-    author="Jack Dockerty",
+    author="jdockerty",
     description="Job searching through code, interaction to the Reed API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
