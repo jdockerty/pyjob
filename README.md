@@ -15,4 +15,4 @@ You can:
 * Add CI pipeline.
 * Add custom exceptions for raising errors, currently just exiting on error and printing a log message with `sys.exit`. Instead will raise exception and move the current logging message to the raised exception.
 * ~~Build out a **Detail** class for finding more information around a job with the ID. [Response is similar, just with extended description, using this for now.~~
-* Create CLI wrapper for this API for job searches on the command line.
+* ~~Create CLI wrapper for this API for job searches on the command line.~~
