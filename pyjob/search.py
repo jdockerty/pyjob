@@ -242,11 +242,12 @@ class Search(object):
         
         if self._search_keyterms is None:
             logger.debug("No search keyterms are set.")
+        elif isinstance(self._search_keyterms, str):
+            url += f"&keywords={self._search_keyterms}"
         else:
             url += f"&keywords="
             for keyword in self._search_keyterms:
                 url += f"%20{keyword}"
-            logger.debug("Keywords URL: %s", url)
   
         if self._location is None:
             logger.debug("No location set.")
