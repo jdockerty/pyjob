@@ -6,7 +6,7 @@ After providing an API key you can interact with the API for finding jobs that h
 
 You can:
 * **Search** for jobs
-* Find **details** of particular jobs using their IDs.
+* Find **details** of particular jobs using their IDs, this is used to grab an *extended* description of the job.
 
 
 ## TODO
