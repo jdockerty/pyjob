@@ -8,6 +8,9 @@ You can:
 * **Search** for jobs
 * Find **details** of particular jobs using their IDs, this is used to grab an *extended* description of the job.
 
+## Installation
+
+    pip install pyjob
 
 ## TODO
 
