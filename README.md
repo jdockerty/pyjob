@@ -12,6 +12,20 @@ You can:
 
     pip install pyjob-jdockerty
 
+## CLI Usage
+
+A simple search can be conducted using the command
+
+    pyjob search --term "software engineer" --max-results 3
+
+This displays results for jobs which match the term `software engineer` according to Reed's API, displaying the first 3 results to you.
+
+To view available flags, use the `--help` flag
+
+    pyjob search --help
+
+This provides a greater list of options to pass into the CLI.
+
 ## TODO
 
 * ~~Finish **Search** class for API interaction.~~
