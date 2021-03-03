@@ -12,6 +12,10 @@ You can:
 
     pip install pyjob-jdockerty
 
+You will also need to register for a [Reed API](https://www.reed.co.uk/developers/jobseeker) key and export this, e.g.
+
+    export REED_API_KEY=<your_key>
+
 ## CLI Usage
 
 A simple search can be conducted using the command
