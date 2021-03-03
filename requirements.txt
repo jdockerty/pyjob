@@ -20,8 +20,6 @@ pluggy==0.13.1
 py==1.10.0
 pycparser==2.20
 Pygments==2.8.0
--e git+https://github.com/jdockerty/pyjob.git@cd62f384f68ac5d77f75a957eb08f5eccaf1f578#egg=pyjob
-pyjob-jdockerty==0.1
 pyparsing==2.4.7
 pytest==6.2.2
 readme-renderer==29.0
