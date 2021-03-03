@@ -1,6 +1,5 @@
 from pyjob.search import Search
 from pyjob.details import Details
-from tqdm import tqdm
 import click
 import sys
 import os
