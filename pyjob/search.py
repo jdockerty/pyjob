@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+import time
 from loguru import logger
 
 class Search(object):
@@ -137,8 +138,12 @@ class Search(object):
         Args:
             location (str): The job location, such as London.
         """
-        
-        self._location = location
+
+        if location is None:
+            return
+        logger.info("NOTE: The REED API seems to display job adverts that are also promoted/sponsored outside of your specified location.")
+        time.sleep(2)
+        self._location = location.replace(" ", "+")
     
     def set_location_distance(self, distance: int):
         """Set the distance, in miles, from a location that jobs can be near to.
@@ -166,7 +171,7 @@ class Search(object):
             max (int, optional): The highest amount to cap out the job searches for. Defaults to 0.
         """
         
-        if min >= 0 and max >= 0:
+        if min >= 0 or max >= 0:
             self._minimum_salary = min
             self._maximum_salary = max
             logger.debug("Maximum salary: {}, Minimum salary: {}", self._maximum_salary, self._minimum_salary)
@@ -243,17 +248,20 @@ class Search(object):
         if self._search_keyterms is None:
             logger.debug("No search keyterms are set.")
         elif isinstance(self._search_keyterms, str):
-            url += f"&keywords={self._search_keyterms}"
+            sanitised_kw = self._search_keyterms.replace(" ", "+")
+            url += f"&Keywords={sanitised_kw}"
         else:
-            url += f"&keywords="
+            url += f"&Keywords="
             for keyword in self._search_keyterms:
-                url += f"%20{keyword}"
+                sanitised_kw = keyword.replace(" ", "+")
+                keyword.replace
+                url += f"{sanitised_kw}%20"
   
         if self._location is None:
             logger.debug("No location set.")
         else:
             logger.debug("Location set to {}", self._location)
-            url += f"&location={self._location}"
+            url += f"&Location={self._location}"
         
         if self._maximum_salary > 0:
             logger.debug("Maximum salary set to {}", self._maximum_salary)
